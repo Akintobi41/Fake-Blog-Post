@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Source Code Pro", monospace;
+}
+
+body {
+  position: relative;
+  max-width: 1500px;
+  margin: auto;
+  padding: 1rem;
+  background-color: #121418;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
