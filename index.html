@@ -15,6 +15,26 @@
     <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
+    <header>
+      <section class="modify-section"> 
+       <div class="post-div">
+           <p class="all-posts"><a href="">All Posts</a></p>
+           <p class="posts" id="open">POST</p>
+       </div>
+      
+      </section>
+      <section class="search-sort">
+      <input type="search" placeholder="search blogposts">
+
+      <select>
+          <option default selected disabled>Sort content</option>
+       <option value="0">By smallest</option>
+       <option value="1">By largest</option>
+   </select>
+   </section>
+   </header>
+   <div id="loading" class="loader"></div>
+    <section class="section"></section>
     <script src="/script.js"></script>
   </body>
 </html>
