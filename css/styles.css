@@ -15,3 +15,45 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+.section {
+  position: relative;
+  width: 100%;
+  display: flex;
+  gap: 3%;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 4rem;
+}
+.mini-container {
+  position: relative;
+  width: 16rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  background-color: #58c49b;
+  border-radius: 5px;
+  box-shadow: 0 0 2px #afca7a;
+  height: 17rem;
+}
+img {
+  position: absolute;
+  width: 1.2rem;
+  height: 1.2rem;
+  right: 7px;
+  bottom: 10px;
+}
+.loader {
+  border: 10px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 10px solid #58c49b;
+  border-bottom: 10px solid #58c49b;
+  width: 8rem;
+  height: 8rem;
+  animation: spin 2s linear infinite;
+  z-index: 1;
+  transition: 0.8s;
+  position: absolute;
+  top: 1%;
+  left: 25%;
+  transform: translate(-50%, -50%);
+  margin: auto;
+}
