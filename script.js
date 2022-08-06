@@ -457,5 +457,152 @@ const loadCards = async () => {
      }
 
 }
+open.addEventListener('click', postContent) 
 
-loadCards();
+
+function postContent(e){
+  
+ let postTitle = document.querySelector('.post-title'),
+
+  postText = document.querySelector('.post-text');
+ 
+  postTitle.value = '';
+ 
+  postText.value = '';
+
+  modal_container.classList.add('show');
+  section.style.display = "none";
+  postFooter.style.display = "none";
+
+  newId++;
+
+
+  e.stopPropagation();
+  
+   
+  let closeModal = async () => {
+    timer++;
+
+    close.style.backgroundColor = "transparent";
+    
+    close.style.color = "#f5f5f5";
+    
+    close.style.cursor = "not-allowed";
+
+    let postTitle = document.querySelector('.post-title'),
+
+        postText = document.querySelector('.post-text');
+
+    let user = fetch('https://jsonplaceholder.typicode.com/posts', {
+        method: 'POST',
+        body: JSON.stringify({
+        title: postTitle.value,
+        body: postText.value,
+        userId: newId,
+      }),
+        headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+
+    }).then(data => data)
+      .then((newData) => newData);  // first change
+
+    let newData = await user;
+
+    if (newData.status === 201) {
+
+      modal_container.classList.remove('show');
+
+      section.style.display = "flex";
+
+      close.style.backgroundColor = "#3f4b9d";
+
+      close.style.cursor = "pointer";
+
+      postFooter.style.display = "flex";
+
+      let addedPost_data = await user;
+
+      let usable_data = await addedPost_data.json();
+
+      let newUser = []; // Array to store new data 
+
+      newUser.push(usable_data)
+      
+      newUser.forEach(function (elements) {
+
+        let div = document.createElement('div');
+
+        let p = document.createElement('p');
+
+        p.textContent = elements.body;
+
+        let img = document.createElement('img');
+        let img2 = document.createElement('img');
+
+        img.src = "/invalid.png";
+        img2.src = "/create-outline.svg";
+
+        img.classList.add('close-image');
+        img2.classList.add('edit-content');
+
+        div.appendChild(p);
+        div.appendChild(img);
+        div.appendChild(img2);
+        section.appendChild(div);
+        div.classList.add('mini-container');
+        p.classList.add('text-content');
+        p.id = newId;
+
+        img.addEventListener('click', deleteElement,true);
+
+        img2.addEventListener('click', function (e) {
+
+          close.removeEventListener('click', closeModal);
+
+          postFooter.style.display = "none";
+
+          section.style.display = "none";
+          postTitle.value = e.target.previousSibling.previousSibling.id.title;
+          postText.value = e.target.previousSibling.previousSibling.textContent;
+
+          new_text = e.target.previousSibling.previousSibling;
+        console.log(new_text)
+          modal_container.classList.add('show');
+
+          let patchResource = async (e) => {
+            new_text.textContent = postText.value;
+
+            fetch('https://jsonplaceholder.typicode.com/posts/1', {
+
+              method: 'PATCH',
+              body: JSON.stringify({
+                title: postTitle.value,
+                body: postText.value
+
+              }),
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+              },
+            })
+              .then((response) => response.json())
+
+            modal_container.classList.remove('show');
+            section.style.display = "flex";
+            document.querySelector('footer').style.display = "flex";
+
+            e.stopImmediatePropagation();
+
+          }
+
+          close.addEventListener('click', patchResource);
+ 
+        })
+
+      });
+
+    }
+  }
+  close.addEventListener('click', closeModal,{once:true})   // Making posts post only once
+
+}
