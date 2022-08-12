@@ -322,3 +322,68 @@ let runEdit = async (e) => {
   close.addEventListener('click', patchResource, { once: true });
 };
 // Editing content 
+//Dark Mode Effect
+const body = document.querySelector('body'),
+  toggle = document.getElementById('toggle'),
+  postDiv = document.querySelector('.post-div .posts'),
+  postLink = document.querySelector('.post-div a');
+
+toggle.addEventListener('click', function () {
+  toggle.classList.toggle('active');
+  body.classList.toggle('active');
+  postDiv.classList.toggle('active');
+  postLink.classList.toggle('active');
+})
+
+// Pagination
+
+function prev() {
+  if (current_page > 1) {
+    current_page--;
+    changePage(current_page)
+  }
+}
+
+function next() {
+  if (current_page < numPages()) {
+    current_page++;
+    changePage(current_page)
+  }
+
+}
+
+function changePage(page) {
+  if (page < 1) page = 1;  // starting point;
+
+  if (page > numPages) page = numPages(); // ending point
+
+  section.innerHTML = '';
+  btn_next.addEventListener('click', next);
+  btn_prev.addEventListener('click', prev);
+
+  for (let i = (page - 1) * records_per_page; i < (page * records_per_page) && i < miniContainer.length; i++) {
+    section.appendChild(miniContainer[i]);
+  }
+
+  page_span.innerHTML = `${page}/${numPages()}`
+
+  if ((page) == 1) {
+    btn_prev.style.visibility = "hidden";
+  }
+  else {
+    btn_prev.style.visibility = "visible";
+  }
+  if ((page) == numPages()) {
+    btn_next.style.visibility = "hidden";
+  }
+  else {
+    btn_next.style.visibility = "visible";
+  }
+
+}
+
+function numPages(page) {
+  return Math.ceil(miniContainer.length / records_per_page)
+}
+
+//
