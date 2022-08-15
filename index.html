@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>|Fake Blog</title>
+    <title>Akin's Blog</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,11 +19,11 @@
       <section class="modify-section">
         <div class="post-div">
           <p class="all-posts"><a href="">All Posts</a></p>
-          <p class="posts" id="open">POST</p>
+          <p class="posts" id="open">new Post</p>
         </div>
       </section>
       <section class="search-sort">
-        <input type="search" placeholder="search blogposts" />
+        <input type="search" placeholder="search blogposts...." />
 
         <select>
           <option default selected disabled>Sort content</option>
@@ -32,8 +32,34 @@
         </select>
       </section>
     </header>
-    <div id="loading" class="loader"></div>
-    <section class="section"></section>
+
+    <main>
+      <div id="toggle">
+        <i class="indicator"></i>
+      </div>
+      <div class="modal-container" id="modal">
+        <div class="modal">
+          <label name="title">
+            Title:<input type="text" name="title" class="post-title"
+          /></label>
+          <label name="body">
+            Body: <textarea name="body" class="post-text"></textarea>
+          </label>
+          <button id="submit-edit" class="submit">Submit</button>
+        </div>
+      </div>
+      <section class="section"></section>
+      <footer>
+        <div class="pagination">
+          <span id="btn_prev">Prev</span>
+          <span id="btn_next">Next</span>
+        </div>
+        <div>page: <span id="page"></span></div>
+      </footer>
+    </main>
+    <div class="loader-icon">
+      <div class="loader"></div>
+    </div>
     <script src="/script.js"></script>
   </body>
 </html>

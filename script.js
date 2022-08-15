@@ -33,8 +33,14 @@ let loadOut = document.querySelector('#loading'),
   // 
 
   newId = 100;  // For adding new ID's after fetching new cards
+ 
+  let shortText;
 
-let miniContainer; // For appending the new containers after fetching
+  let newP;
+  
+  let miniContainer; // For appending the new containers after fetching
+const loaderWrapper = document.querySelector(".loader-icon");
+
 
 const user = fetch('https://jsonplaceholder.typicode.com/posts')
   .then((response) => {
@@ -43,7 +49,6 @@ const user = fetch('https://jsonplaceholder.typicode.com/posts')
   });
 
 // Loader Display
-const loaderWrapper = document.querySelector(".loader-icon");
 loaderWrapper.style.display = "grid"
 postFooter.style.display = "none";
 //
@@ -62,8 +67,11 @@ const loadCards = async () => {
     // Creating cards UI
     let div = document.createElement('div'),
       p = document.createElement('p');
+      pTitle = document.createElement('p');
 
     p.textContent = item.body;
+    pTitle.textContent = item.title;
+  
 
     let img = document.createElement('img');
     img.src = "/invalid.png";
@@ -72,13 +80,26 @@ const loadCards = async () => {
     let new_img = document.createElement('img');
     new_img.src = "/create-outline.svg";
     new_img.classList.add('edit-content');
-
+   
+    // Shorten Content
+    shortText = p.textContent;
+    newP = p;
+    shorten(shortText,100)
+    function shorten(shortText,maxLength){
+       if(shortText.length > maxLength){ 
+       shortText = shortText.substr(0,shortText.length - 60) + "....";
+      }
+      return p.textContent = shortText;
+    }
+    //
     // Appending cards and new elements to section
+    div.appendChild(pTitle)
     div.appendChild(p);
     div.appendChild(img);
     div.appendChild(new_img);
     section.appendChild(div);
     div.classList.add('mini-container');
+    pTitle.classList.add('text-title');
     p.classList.add('text-content');
     p.id = index + 1;
     img.addEventListener('click', deleted, { once: true });
@@ -111,11 +132,9 @@ let closeModal = async () => {
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
     },
-
-  }).then(data => data.json())
+  })
 
   let newData = await user;
-
   if (newData.status === 201) {
     modal_container.style.display = "none";
     modal_container.classList.remove('show');
@@ -138,7 +157,8 @@ let closeModal = async () => {
       let firstContainer = document.querySelector('.mini-container'),
         div = document.createElement('div'),
         p = document.createElement('p');
-
+        pTitle = document.createElement('p');
+        pTitle.textContent = elements.title;
       p.textContent = elements.body;
 
       let img = document.createElement('img'),
@@ -149,7 +169,8 @@ let closeModal = async () => {
 
       img.classList.add('close-image');
       img2.classList.add('edit-content');
-
+ 
+      div.appendChild(pTitle)
       div.appendChild(p);
       div.appendChild(img);
       div.appendChild(img2);
@@ -161,6 +182,7 @@ let closeModal = async () => {
 
       div.classList.add('mini-container');
       p.classList.add('text-content');
+      pTitle.classList.add('text-title')
 
       p.id = newId;
 
@@ -176,10 +198,11 @@ let closeModal = async () => {
 
         postFooter.style.display = "none";
         section.style.display = "none";
-        postTitle.value = e.target.previousSibling.previousSibling.id.title;
+        postTitle.value = e.target.previousSibling.previousSibling.previousSibling.textContent;
         postText.value = e.target.previousSibling.previousSibling.textContent;
-
         new_text = e.target.previousSibling.previousSibling;
+        new_text1 = e.target.previousSibling.previousSibling.previousSibling;
+
         if (postTitle.value == "undefined") {
           postTitle.value = "No Title";
         }
@@ -190,6 +213,7 @@ let closeModal = async () => {
         let patchResource = async (e) => {
 
           new_text.textContent = postText.value;
+          new_text1.textContent = postTitle.value;
 
           fetch('https://jsonplaceholder.typicode.com/posts/1', {
             method: 'PATCH',
@@ -289,6 +313,7 @@ let runEdit = async (e) => {
     postText.value = e.target.previousSibling.previousSibling.textContent;
 
     new_text = e.target.previousSibling.previousSibling;
+    new_text1 = e.target.previousSibling.previousSibling.previousSibling;
 
     modal_container.classList.add('show');
   }
@@ -298,6 +323,7 @@ let runEdit = async (e) => {
 
   let patchResource = async () => {
     new_text.textContent = postText.value;
+    new_text1.textContent = postTitle.value;
 
     fetch('https://jsonplaceholder.typicode.com/posts/`${card[e.target.previousSibling.previousSibling.id].id}`', {
 
@@ -322,7 +348,8 @@ let runEdit = async (e) => {
   close.addEventListener('click', patchResource, { once: true });
 };
 // Editing content 
-//Dark Mode Effect
+
+// Dark Mode Effect
 const body = document.querySelector('body'),
   toggle = document.getElementById('toggle'),
   postDiv = document.querySelector('.post-div .posts'),
@@ -387,3 +414,190 @@ function numPages(page) {
 }
 
 //
+let newSection;
+
+// Search Results
+function newResults() {
+  btn_next.removeEventListener('click', next);
+  btn_prev.removeEventListener('click', prev);
+  postFooter.style.display = "flex";
+
+  newSection = Array.from(miniContainer).filter(function (item) {
+    return item.children[1].textContent.startsWith(inputSearch.value);
+  })
+  section.innerHTML = '';
+  section.append(...newSection)
+  let current_page1 = 1;
+
+  function prev2() {
+
+    if (current_page1 > 1) {
+      current_page1--;
+      changePage(current_page1)
+    }
+  }
+
+  function next2() {
+
+    if (current_page1 < numPages()) {
+      current_page1++;
+      changePage(current_page1)
+    }
+
+  }
+
+  function changePage(page) {
+    btn_next.addEventListener('click', next2);
+    btn_prev.addEventListener('click', prev2);
+
+    if (page < 1) page = 1;  // starting point;
+    if (page > numPages()) page = numPages(); // ending point
+
+    section.innerHTML = '';
+
+    if (newSection.length) {
+      for (let i = (page - 1) * records_per_page; i < (page * records_per_page) && i < newSection.length; i++) {
+        section.appendChild(newSection[i]);
+      }
+    }
+
+    else {
+      section.innerHTML = `<p class="no-result">No results found..</p>`;
+      document.querySelector('.modal-container').style.overflow = "hidden"
+      postFooter.style.display = "none";
+    }
+
+    page_span.innerHTML = `${page}/${numPages()}`
+
+    if ((page) == 1) {
+      btn_prev.style.visibility = "hidden";
+    }
+    else {
+      btn_prev.style.visibility = "visible";
+    }
+    if ((page) == numPages()) {
+      btn_next.style.visibility = "hidden";
+    }
+    else {
+      btn_next.style.visibility = "visible";
+    }
+  }
+
+  function numPages(page) {
+    return Math.ceil(newSection.length / records_per_page)
+  }
+  changePage(1);
+}
+
+
+// Sorting Content
+function sortContent(e) {
+  btn_next.removeEventListener('click', next);
+  btn_prev.removeEventListener('click', prev);
+
+  let newSort = Array.from(miniContainer).map((item) => item)
+
+  if (e.target.value == 0) {
+    newSort.sort((a, b) => (a.children[1].textContent.length > b.children[1].textContent.length) ? 1 : -1)
+    section.innerHTML = '';
+    section.append(...newSort);
+
+    function prev2() {
+      if (current_page > 1) {
+        current_page--;
+        changePage(current_page)
+      }
+    }
+
+    function next2() {
+      if (current_page < numPages()) {
+        current_page++;
+        changePage(current_page)
+      }
+    }
+
+    function changePage(page) {
+      if (page < 1) page = 1;  // starting point;
+      if (page > numPages) page = numPages(); // ending point
+
+      section.innerHTML = '';
+      btn_next.addEventListener('click', next2);
+      btn_prev.addEventListener('click', prev2);
+
+      for (let i = (page - 1) * records_per_page; i < (page * records_per_page) && i < newSort.length; i++) {
+        section.appendChild(newSort[i]);
+      }
+      page_span.innerHTML = `${page}/${numPages()}`
+
+      if ((page) == 1) {
+        btn_prev.style.visibility = "hidden";
+      }
+      else {
+        btn_prev.style.visibility = "visible";
+      }
+      if ((page) == numPages()) {
+        btn_next.style.visibility = "hidden";
+      }
+      else {
+        btn_next.style.visibility = "visible";
+      }
+
+    }
+    let numPages = ((page) => Math.ceil(newSort.length / records_per_page));
+    changePage(1);
+  }
+
+  if (e.target.value == 1) {
+    newSort.sort((a, b) => (a.children[1].textContent.length < b.children[1].textContent.length) ? 1 : -1);
+    section.innerHTML = '';
+    section.append(...newSort);
+
+    function prev2() {
+      if (current_page > 1) {
+        current_page--;
+        changePage(current_page)
+      }
+    }
+
+    function next2() {
+      if (current_page < numPages()) {
+        current_page++;
+        changePage(current_page)
+      }
+    }
+
+    function changePage(page) {
+
+      if (page < 1) page = 1;  // starting point;
+      if (page > numPages) page = numPages(); // ending point
+
+      section.innerHTML = '';
+      btn_next.addEventListener('click', next2);
+      btn_prev.addEventListener('click', prev2);
+
+      for (let i = (page - 1) * records_per_page; i < (page * records_per_page) && i < newSort.length; i++) {
+        section.appendChild(newSort[i]);
+      }
+      page_span.innerHTML = `${page}/${numPages()}`
+
+      if ((page) == 1) {
+        btn_prev.style.visibility = "hidden";
+      }
+      else {
+        btn_prev.style.visibility = "visible";
+      }
+      if ((page) == numPages()) {
+        btn_next.style.visibility = "hidden";
+      }
+      else {
+        btn_next.style.visibility = "visible";
+      }
+    }
+
+    function numPages(page) {
+      return Math.ceil(newSort.length / records_per_page)
+    }
+    changePage(1);
+  }
+}
+ 
