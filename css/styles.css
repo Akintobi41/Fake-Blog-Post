@@ -329,7 +329,7 @@ button {
   margin-block: 0.5rem;
   cursor: pointer;
   width: 64%;
-  margin-left: 7.4rem;
+  margin-left: 5.4rem;
 }
 
 .close {
@@ -434,5 +434,8 @@ footer a {
   }
   .post-div .posts {
     margin-left: 3rem;
+  }
+  button{ 
+    margin-left: 7.4rem;
   }
 }

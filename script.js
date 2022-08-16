@@ -2,7 +2,7 @@ let loadOut = document.querySelector('#loading'),
 
   newBody = document.querySelector('body')
 
-  open = document.querySelector('#open'),
+open = document.querySelector('#open'),
 
   postTitle = document.querySelector('.post-title'),
 
@@ -33,12 +33,12 @@ let loadOut = document.querySelector('#loading'),
   // 
 
   newId = 100;  // For adding new ID's after fetching new cards
- 
-  let shortText;
 
-  let newP;
-  
-  let miniContainer; // For appending the new containers after fetching
+let shortText;
+
+let newP;
+
+let miniContainer; // For appending the new containers after fetching
 const loaderWrapper = document.querySelector(".loader-icon");
 
 
@@ -67,11 +67,11 @@ const loadCards = async () => {
     // Creating cards UI
     let div = document.createElement('div'),
       p = document.createElement('p');
-      pTitle = document.createElement('p');
+    pTitle = document.createElement('p');
 
     p.textContent = item.body;
     pTitle.textContent = item.title;
-  
+
 
     let img = document.createElement('img');
     img.src = "/invalid.png";
@@ -80,14 +80,14 @@ const loadCards = async () => {
     let new_img = document.createElement('img');
     new_img.src = "/create-outline.svg";
     new_img.classList.add('edit-content');
-   
+
     // Shorten Content
     shortText = p.textContent;
     newP = p;
-    shorten(shortText,100)
-    function shorten(shortText,maxLength){
-       if(shortText.length > maxLength){ 
-       shortText = shortText.substr(0,shortText.length - 60) + "....";
+    shorten(shortText, 100)
+    function shorten(shortText, maxLength) {
+      if (shortText.length > maxLength) {
+        shortText = shortText.substr(0, shortText.length - 75) + "....";
       }
       return p.textContent = shortText;
     }
@@ -102,8 +102,8 @@ const loadCards = async () => {
     pTitle.classList.add('text-title');
     p.classList.add('text-content');
     p.id = index + 1;
-    img.addEventListener('click', deleted, { once: true });
-    new_img.addEventListener('click', runEdit, { once: true })
+    img.addEventListener('click', deleted);
+    new_img.addEventListener('click', runEdit)
   });
 
   miniContainer = document.querySelectorAll('.mini-container'); // Assigning the new cards to the miniContainer variable
@@ -157,8 +157,8 @@ let closeModal = async () => {
       let firstContainer = document.querySelector('.mini-container'),
         div = document.createElement('div'),
         p = document.createElement('p');
-        pTitle = document.createElement('p');
-        pTitle.textContent = elements.title;
+      pTitle = document.createElement('p');
+      pTitle.textContent = elements.title;
       p.textContent = elements.body;
 
       let img = document.createElement('img'),
@@ -169,7 +169,7 @@ let closeModal = async () => {
 
       img.classList.add('close-image');
       img2.classList.add('edit-content');
- 
+
       div.appendChild(pTitle)
       div.appendChild(p);
       div.appendChild(img);
@@ -186,7 +186,7 @@ let closeModal = async () => {
 
       p.id = newId;
 
-      img.addEventListener('click', deleted, true);
+      img.addEventListener('click', deleted);
 
       img2.addEventListener('click', function (e) {
 
@@ -269,6 +269,8 @@ refreshBtn.addEventListener('click', loadCards)  // Refresh Page
 // Delete Items
 let deleted = async (e) => {
 
+  e.stopImmediatePropagation()
+
   const loaderWrapper = document.querySelector(".loader-icon")
   loaderWrapper.style.display = "grid"
 
@@ -297,7 +299,7 @@ let deleted = async (e) => {
 // Editing Content
 
 let runEdit = async (e) => {
-  e.stopPropagation();   // new change
+  e.stopImmediatePropagation();   // new change
   modal_container.style.display = "flex";
 
   try {
@@ -308,8 +310,7 @@ let runEdit = async (e) => {
 
     section.style.display = "none";
 
-    postTitle.value = card1[e.target.previousSibling.previousSibling.id].title;
-
+    postTitle.value = card1[e.target.previousSibling.previousSibling.id - 1].title;
     postText.value = e.target.previousSibling.previousSibling.textContent;
 
     new_text = e.target.previousSibling.previousSibling;
@@ -492,6 +493,7 @@ function newResults() {
 
 // Sorting Content
 function sortContent(e) {
+  let current_page2 = 1;
   btn_next.removeEventListener('click', next);
   btn_prev.removeEventListener('click', prev);
 
@@ -503,26 +505,28 @@ function sortContent(e) {
     section.append(...newSort);
 
     function prev2() {
-      if (current_page > 1) {
-        current_page--;
-        changePage(current_page)
+
+      if (current_page2 > 1) {
+        current_page2--;
+        changePage(current_page2)
       }
     }
 
     function next2() {
-      if (current_page < numPages()) {
-        current_page++;
-        changePage(current_page)
+      if (current_page2 < numPages()) {
+        current_page2++;
+        changePage(current_page2)
       }
     }
 
     function changePage(page) {
+
       if (page < 1) page = 1;  // starting point;
       if (page > numPages) page = numPages(); // ending point
 
       section.innerHTML = '';
-      btn_next.addEventListener('click', next2);
-      btn_prev.addEventListener('click', prev2);
+      btn_next.addEventListener('click', next2, false);
+      btn_prev.addEventListener('click', prev2, false);
 
       for (let i = (page - 1) * records_per_page; i < (page * records_per_page) && i < newSort.length; i++) {
         section.appendChild(newSort[i]);
@@ -548,21 +552,23 @@ function sortContent(e) {
   }
 
   if (e.target.value == 1) {
+
     newSort.sort((a, b) => (a.children[1].textContent.length < b.children[1].textContent.length) ? 1 : -1);
     section.innerHTML = '';
     section.append(...newSort);
 
-    function prev2() {
-      if (current_page > 1) {
-        current_page--;
-        changePage(current_page)
+    function prev3() {
+      if (current_page2 > 1) {
+        current_page2--;
+        changePage(current_page2)
       }
     }
 
-    function next2() {
-      if (current_page < numPages()) {
-        current_page++;
-        changePage(current_page)
+    function next3() {
+
+      if (current_page2 < numPages()) {
+        current_page2++;
+        changePage(current_page2)
       }
     }
 
@@ -572,8 +578,8 @@ function sortContent(e) {
       if (page > numPages) page = numPages(); // ending point
 
       section.innerHTML = '';
-      btn_next.addEventListener('click', next2);
-      btn_prev.addEventListener('click', prev2);
+      btn_next.addEventListener('click', next3, false);
+      btn_prev.addEventListener('click', prev3, false);
 
       for (let i = (page - 1) * records_per_page; i < (page * records_per_page) && i < newSort.length; i++) {
         section.appendChild(newSort[i]);
@@ -600,4 +606,4 @@ function sortContent(e) {
     changePage(1);
   }
 }
- 
+
