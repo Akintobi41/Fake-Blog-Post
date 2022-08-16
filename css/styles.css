@@ -46,7 +46,8 @@ body.active footer {
 }
 
 body.active select {
-  background-color: transparent;
+  background-color: #fff;
+  box-shadow: 0 0 1px #000;
 }
 
 body.active .submit {
@@ -210,11 +211,19 @@ header {
 
 select {
   outline: none;
+  border: none;
   height: 1.5rem;
   font-size: 0.8rem;
   align-self: center;
   margin-left: 1rem;
   cursor: pointer;
+  color: #121418;
+}
+
+select:active,
+select:focus {
+  accent-color: white;
+  color: #121418;
 }
 
 .post-div {
@@ -368,6 +377,7 @@ footer {
   max-width: 1500px;
   position: absolute;
   bottom: 0;
+  font-size: 0.9rem;
   margin: 2rem 0;
   color: #fff;
   display: flex;
@@ -394,7 +404,7 @@ footer a {
 
 .pagination {
   user-select: none;
-  margin: 0 5rem;
+  margin: 0 2rem;
 }
 
 @media screen and (min-width: 575px) {
@@ -418,6 +428,7 @@ footer a {
     margin-left: 1rem;
     outline: none;
     border: none;
+    color: #121418;
   }
 
   ::placeholder {
@@ -435,7 +446,7 @@ footer a {
   .post-div .posts {
     margin-left: 3rem;
   }
-  button{ 
+  button {
     margin-left: 7.4rem;
   }
 }
