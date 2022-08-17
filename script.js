@@ -42,25 +42,34 @@ let miniContainer; // For appending the new containers after fetching
 const loaderWrapper = document.querySelector(".loader-icon");
 
 
-const user = fetch('https://jsonplaceholder.typicode.com/posts')
-  .then((response) => {
-    loaderWrapper.style.display = "none"
-    return response
-  });
-
 // Loader Display
 loaderWrapper.style.display = "grid"
 postFooter.style.display = "none";
 //
 
+// Async function to get fetch results
+
+let user = async () => {
+
+  try {
+    let response = await fetch('https://jsonplaceholder.typicode.com/posts')
+    return response;
+  }
+  catch (error) {
+    console.log(error)
+  }
+}
+user();
+// 
+
 // Fetch and add cards to UI
 const loadCards = async () => {
-  let newPost = await user;
+  let newPost = await user();
 
   if (newPost.status === 200) {
     postFooter.style.display = "flex";
+    loaderWrapper.style.display = "none"
   }
-
   let card = await newPost.json();
 
   card.forEach(function (item, index) {
@@ -424,8 +433,9 @@ function newResults() {
   postFooter.style.display = "flex";
 
   newSection = Array.from(miniContainer).filter(function (item) {
-    return item.children[1].textContent.startsWith(inputSearch.value);
+    return item.children[1].textContent.startsWith(inputSearch.value.toLowerCase());
   })
+  console.log(newSection)
   section.innerHTML = '';
   section.append(...newSection)
   let current_page1 = 1;
