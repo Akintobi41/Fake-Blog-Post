@@ -39,8 +39,8 @@ let shortText;
 let newP;
 
 let miniContainer; // For appending the new containers after fetching
-const loaderWrapper = document.querySelector(".loader-icon");
 
+const loaderWrapper = document.querySelector(".loader-icon");
 
 // Loader Display
 loaderWrapper.style.display = "grid"
@@ -56,7 +56,7 @@ let user = async () => {
     return response;
   }
   catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 user();
@@ -94,9 +94,10 @@ const loadCards = async () => {
     shortText = p.textContent;
     newP = p;
     shorten(shortText, 100)
+
     function shorten(shortText, maxLength) {
       if (shortText.length > maxLength) {
-        shortText = shortText.substr(0, shortText.length - 75) + "....";
+        shortText = shortText.substr(0, shortText.length - 75) + "...";
       }
       return p.textContent = shortText;
     }
@@ -435,7 +436,6 @@ function newResults() {
   newSection = Array.from(miniContainer).filter(function (item) {
     return item.children[1].textContent.startsWith(inputSearch.value.toLowerCase());
   })
-  console.log(newSection)
   section.innerHTML = '';
   section.append(...newSection)
   let current_page1 = 1;
