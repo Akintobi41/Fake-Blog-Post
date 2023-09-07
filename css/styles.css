@@ -108,7 +108,7 @@ body.active input[type="search"] {
   position: relative;
   width: 100%;
   display: flex;
-  gap: 3%;
+  gap: 5%;
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 5rem;
@@ -195,10 +195,12 @@ body.active input[type="search"] {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
 }
+
 /*  Animation End */
 
 header {
@@ -441,12 +443,15 @@ footer a {
   header {
     padding: 2rem;
   }
+
   .post-div {
     font-size: 1.5rem;
   }
+
   .post-div .posts {
     margin-left: 3rem;
   }
+
   button {
     margin-left: 7.4rem;
   }
