@@ -35,9 +35,7 @@ open = document.querySelector('#open'),
   newId = 100;  // For adding new ID's after fetching new cards
 
 let shortText;
-
 let newP;
-
 let miniContainer; // For appending the new containers after fetching
 
 const loaderWrapper = document.querySelector(".loader-icon");
